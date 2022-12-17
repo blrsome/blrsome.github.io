@@ -1,0 +1,104 @@
+@charset "utf-8";
+:root {
+    --background: rgb(21, 22, 23);
+    --on-background: rgb(204, 202, 199);
+    --primary: rgb(27, 28, 29);
+    --on-primary: rgb(255, 255, 255);
+    --primary-container: rgb(38, 39, 40);
+    --on-primary-container: rgb(255, 161, 170);
+    --secondary: rgb(32, 33, 34);
+    --on-secondary: rgb(215, 210, 210);
+    --secondary-container: rgba(227, 165, 191, 0.35);
+    --on-secondary-container: rgb(232, 157, 188);
+    --tertiary: rgb(21, 22, 23);
+    --on-tertiary: rgb(143, 143, 143);
+    --surface: rgb(32, 33, 34);
+    --surface-variant: rgb(23, 23, 23);
+    --outline: rgb(49, 49, 49);
+    --outline-variant: rgb(45, 45, 45);
+    --scroll-track: transparent;
+    --scroll-thumb: rgba(175, 175, 183, 0.3);
+}
+
+:lang(ja):not(code, kbd, pre, samp) { font-family: 'Noto Sans JP', sans-serif }
+:lang(ko):not(code, kbd, pre, samp) { font-family: 'Noto Sans KR', sans-serif }
+:lang():not(code, kbd, pre, samp) { font-family: 'Noto Sans', sans-serif }
+
+::selection {
+    color: var(--background);
+    background-color: var(--on-background);
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+body {
+    height: 100vh;
+    background-color: var(--background);
+    overflow: hidden;
+}
+body > div {
+    background-color: var(--surface);
+}
+footer::selection {
+    color: var(--on-tertiary);
+    background-color: var(--tertiary);
+}
+
+#\:menu,
+#\:fixed {
+    -ms-grid-columns: 12rem auto;
+    grid-template-columns: 12rem auto;
+    -ms-grid-rows: auto calc(2.25rem - 1.5rem) 1.5rem;
+    grid-template-rows: auto calc(2.25rem - 1.5rem) 1.5rem;
+}
+#\:fixed {
+    margin-inline: 1px;
+}
+
+.cap-0 { height: 0em }
+
+.prose :where(code):not(:where([class~="not-prose"] *))::before,
+.prose :where(code):not(:where([class~="not-prose"] *))::after,
+.prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::before,
+.prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::after {
+    content: "" !important;
+}
+
+.scrollbar-track {
+    background-color: var(--scroll-track) !important;
+}
+.scrollbar-thumb {
+    background-color: var(--scroll-thumb) !important;
+}
+
+[data-href="/"] > span {
+    font-weight: 600;
+    opacity: 0.6;
+}
+[data-menu-idx] > * > div:nth-child(n+2) {
+    margin-top: 0;
+}
+
+@media screen and (max-width: 640px) {
+    #\:app {
+        border: 0;
+    }
+    #\:fixed {
+        margin: unset;
+    }
+}
+@media screen and (max-width: 468px) {
+    #\:menu,
+    #\:fixed {
+        -ms-grid-columns: 9.75rem auto;
+        grid-template-columns: 9.75rem auto;
+    }
+}
+@media screen and (max-width: 334px) {
+    #\:menu,
+    #\:fixed {
+        -ms-grid-columns: 7rem auto;
+        grid-template-columns: 7rem auto;
+    }
+}

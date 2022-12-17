@@ -1,0 +1,20 @@
+[{
+    "name": null,
+    "children": [{
+        "name": "&title",
+        "href": "/",
+        "data-same-url": "&sameTitle"
+    }, {
+        "name": "&thirdParty",
+        "href": "/third",
+        "data-same-url": "&sameURL"
+    }]
+}, {
+    "divide": true
+}, {
+    "name": null,
+    "children": [{
+        "name": "&menuJoke",
+        "data-caption": "&jokeCaption"
+    }]
+}]
