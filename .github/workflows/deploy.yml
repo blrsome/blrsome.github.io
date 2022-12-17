@@ -1,12 +1,10 @@
-name: www
+name: deploy
 
 on:
   push:
     branches: [main]
-    paths: [www/**]
   pull_request:
     branches: [main]
-    paths: [www/**]
 
 jobs:
   test:
@@ -21,12 +19,9 @@ jobs:
 
       - name: Verify formatting
         run: deno fmt --check
-        working-directory: www/
 
       - name: Run linter
         run: deno lint
-        working-directory: www/
 
       - name: Type check website
         run: deno check --remote main.ts dev.ts
-        working-directory: www/
