@@ -18,6 +18,8 @@
     --outline-variant: rgb(45, 45, 45);
     --scroll-track: transparent;
     --scroll-thumb: rgba(175, 175, 183, 0.3);
+    --link: inherit;
+    --link-variant: rgb(123, 156, 234);
 }
 
 :lang(ja):not(code, kbd, pre, samp) { font-family: 'Noto Sans JP', sans-serif }
@@ -27,6 +29,23 @@
 ::selection {
     color: var(--background);
     background-color: var(--on-background);
+}
+
+article * {
+    outline: 0px solid transparent;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    transition-duration: 120ms;
+}
+article *:focus-visible:not(a) {
+    outline: 3px solid var(--outline);
+}
+article a {
+    color: var(--link);
+}
+article a:focus-visible {
+    outline: 0px solid transparent;
+    color: var(--link-variant);
 }
 
 * {
@@ -47,8 +66,8 @@ footer::selection {
 
 #\:menu,
 #\:fixed {
-    -ms-grid-columns: 12rem auto;
-    grid-template-columns: 12rem auto;
+    -ms-grid-columns: 12rem 1fr;
+    grid-template-columns: 12rem 1fr;
     -ms-grid-rows: auto calc(2.25rem - 1.5rem) 1.5rem;
     grid-template-rows: auto calc(2.25rem - 1.5rem) 1.5rem;
 }
@@ -72,6 +91,9 @@ footer::selection {
     background-color: var(--scroll-thumb) !important;
 }
 
+[tabindex] {
+    outline: 0px solid transparent;
+}
 [data-href="/"] > span {
     font-weight: 600;
     opacity: 0.6;
@@ -88,17 +110,16 @@ footer::selection {
         margin: unset;
     }
 }
-@media screen and (max-width: 468px) {
+@media screen and (max-width: 576px) {
     #\:menu,
     #\:fixed {
-        -ms-grid-columns: 9.75rem auto;
-        grid-template-columns: 9.75rem auto;
+        width: 100vw;
+        -ms-grid-columns: 2.5rem 1fr;
+        grid-template-columns: 2.5rem 1fr;
+        -ms-grid-rows: 1fr auto;
+        grid-template-rows: 1fr auto;
     }
-}
-@media screen and (max-width: 334px) {
-    #\:menu,
-    #\:fixed {
-        -ms-grid-columns: 7rem auto;
-        grid-template-columns: 7rem auto;
+    #\:fixed footer {
+        opacity: 0;
     }
 }

@@ -17,10 +17,8 @@ export default function(props: JSX.HTMLAttributes<HTMLElement>) {
                         {t.name && <MenuLabel name={t.name} />}
                         {t.children?.map((t, i) => {
                             tab++
-                            return <MenuButton
-                                class='hover:bg-[var(--primary-container)]'
-                                tabIndex={tab}
-                                {...t} />
+                            return <MenuButton class={`hover:bg-[var(--primary-container)] focus-visible:outline-none focus-visible:ring-2 ring-inset-1 ring-[var(--outline)]`}
+                                tabIndex={tab} {...t} />
                         })}
                     </div>
                 }</div>

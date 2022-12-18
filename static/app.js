@@ -1,14 +1,5 @@
 !function(lng) {
-    const subQueue = [], 
-        captionProps = {
-            '[name=\'&menuJoke\']': {
-                changed(e) {
-                    e.d.count >= 2 && (
-                        e.e.setAttribute('href', '&hookJokeHRef'),
-                        e.e.removeAttribute('data-caption'))
-                }
-            }
-        }
+    const subQueue = []
     let blv1 = null,
         post = null,
         trsl = null
@@ -29,11 +20,6 @@
             c: q,
             e: a,
             d: Object.assign({}, a.dataset)})
-    }
-    function hookCaption(t) {
-        Object.keys(captionProps).forEach(s =>
-            document.querySelector(s) === t.e && (
-                captionProps[s].changed(t)))
     }
     !function runCaption(d) {
         let isRunning = false
@@ -56,7 +42,6 @@
                 t.b.classList.add('bottom-0'),
                 t.b.innerText = t.d[t.c],
                 t.e.dataset.count = parseInt(t.e.dataset.count) + 1 || 1,
-                hookCaption(t),
                 setTimeout(() => {
                     t.b.classList.remove('h-6')
                     const i = setInterval(() =>
@@ -105,6 +90,15 @@
         post = blv1[lng || 'en']
         trsl = post['translate']
         hljs.highlightAll()
+        
+        tailwind.config = {
+            theme: {
+                screens: {
+                    sm: { max: '576px' },
+                    md: { min: '577px' },
+                }
+            }
+        }
         !function(t) {
             t.map(t => (Scrollbar.init(t, opts_sb), t))
         }([menu.querySelector('nav'), menu.querySelector('article')])

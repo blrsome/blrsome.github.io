@@ -2,10 +2,12 @@
     "name": null,
     "children": [{
         "name": "&title",
+        "icon": "ArrowUpLeft24Filled",
         "href": "/",
         "data-same-url": "&sameTitle"
     }, {
         "name": "&thirdParty",
+        "icon": "Library24Filled",
         "href": "/third",
         "data-same-url": "&sameURL"
     }]
@@ -15,6 +17,7 @@
     "name": null,
     "children": [{
         "name": "&menuJoke",
+        "icon": "Cookie24Filled",
         "data-caption": "&jokeCaption"
     }]
 }]
