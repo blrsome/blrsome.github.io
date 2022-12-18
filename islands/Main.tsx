@@ -14,7 +14,7 @@ export default function(props: JSX.HTMLAttributes<HTMLDivElement>) {
                 <VerticalMenu />
                 <Article class='p-[0.5rem_1rem] col-[2] row-[1/4]
                     prose prose-sm prose-invert prose-blockquote:my-5' />
-                <div class='inset-x-0 bottom-0 fixed grid grid-cols-[1fr_640px_1fr]'>
+                <div class='inset-x-0 bottom-0 fixed grid grid-cols-[1fr_640px_1fr] pointer-events-none'>
                     <div id=':fixed' class='col-[2] grid transition-all duration-[375ms]'>
                         <Footer id='status' class='col-[1] row-[2/4]'
                             title='Blrsome' alt='since 2022 ⋯ soyne' />
