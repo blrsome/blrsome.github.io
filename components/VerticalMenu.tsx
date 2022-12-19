@@ -14,7 +14,7 @@ export default function(props: JSX.HTMLAttributes<HTMLElement>) {
                 <div data-menu-idx={String(i)}>{
                     t.divide ? <HR />
                     : <div class='select-none'>
-                        {t.name && <MenuLabel name={t.name} />}
+                        {t.name && <MenuLabel class='text-[var(--on-primary-label)] sm:hidden' name={t.name} />}
                         {t.children?.map((t, i) => {
                             tab++
                             return <MenuButton class={`hover:bg-[var(--primary-container)] focus-visible:outline-none focus-visible:ring-2 ring-inset-1 ring-[var(--outline)]`}
