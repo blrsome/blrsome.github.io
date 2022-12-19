@@ -1,23 +1,29 @@
 [{
     "name": null,
     "children": [{
-        "name": "&title",
+        "name": "%menu/title",
         "icon": "ArrowUpLeft24Filled",
         "href": "/",
-        "data-same-url": "&sameTitle"
+        "data-same-url": "%same/title"
     }, {
-        "name": "&thirdParty",
+        "name": "%menu/third",
         "icon": "Library24Filled",
         "href": "/third",
-        "data-same-url": "&sameURL"
+        "data-same-url": "%same/url"
     }]
 }, {
     "divide": true
 }, {
+    "name": "%menu/label/others",
+    "children": [{
+        "name": "%menu/preferences",
+        "href": "/preferences"
+    }]
+}, {
     "name": null,
     "children": [{
-        "name": "&menuJoke",
+        "name": "%menu/joke",
         "icon": "Cookie24Filled",
-        "data-caption": "&jokeCaption"
+        "data-caption": "%menu/joke/caption"
     }]
 }]

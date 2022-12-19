@@ -1,5 +1,13 @@
 !function(lng) {
-    const subQueue = []
+    const subQueue = [],
+        tcfg = {
+            theme: {
+                screens: {
+                    sm: { max: '576px' },
+                    md: { min: '577px' },
+                }
+            }
+        }
     let blv1 = null,
         post = null,
         trsl = null
@@ -64,11 +72,17 @@
         return fetch('./api/r1')
     }
     function tr(t) {
-        return (t && trsl[t]) || null
+        Array.isArray(t) || (t = (t.split('/') || [t]))
+        function dir(p) {
+            const s = t.shift() || '&',
+                l = (p || trsl)[s]
+            return typeof l === 'object' ? dir(l) : l
+        }
+        return dir() || null
     }
     function statusRoute(t, a) {
         function route(e) {
-            setStatus(...(e && a[0]) || a[1] || [tr('idle'), tr('idleAlt')])
+            setStatus(...(e && a[0]) || a[1] || [tr('footer/idle'), tr('footer/idleAlt')])
         }
         Array.isArray(a) && (
             t.addEventListener('mouseover', route),
@@ -82,29 +96,23 @@
     document.addEventListener('DOMContentLoaded', () => (
         document.documentElement.lang = lng,
         document.body.classList.add('opacity-0')))
-    self.onload = async function() {
+    self.addEventListener('load', async () => {
         const opts_sb = { thumbMinSize: 15 },
             menu = document.getElementById('\:menu'),
             sbcp = document.getElementById('sub:content')
         blv1 = await r1().then(t => t.json())
         post = blv1[lng || 'en']
-        trsl = post['translate']
+        trsl = post.translate
+        conf = blv1._conf
+        tailwind.config = tcfg
         hljs.highlightAll()
-        
-        tailwind.config = {
-            theme: {
-                screens: {
-                    sm: { max: '576px' },
-                    md: { min: '577px' },
-                }
-            }
-        }
+        conf.guc.enable && move('under:construction')
         !function(t) {
             t.map(t => (Scrollbar.init(t, opts_sb), t))
         }([menu.querySelector('nav'), menu.querySelector('article')])
         setInterval(() => {
             const t = document.querySelector('article>.scroll-content'),
-                dpt = routePage() || { content: tr('notFound') },
+                dpt = routePage() || { content: tr('error/notfound') },
                 mkd = marked.parse(dpt.content
                     .replace(/\\br/g, '<br>')
                     .replace(/\\hr/g, '<hr>')
@@ -121,33 +129,34 @@
                     .replace(/\s{5}/g, '\n')
             t.innerHTML !== mkd && (t.innerHTML = mkd)
         }, 10)
-        document.querySelectorAll('*').forEach(t =>
-            setInterval(() => {
-                const HTML = t.innerHTML
-                Object.keys(
-                    Object.fromEntries(Array.from(t.attributes).map(t => [t.name, t.value])))
-                    .forEach(f =>
-                        /^&\S+/.test(t.getAttribute(f)) && (
-                            f === 'name' || (
-                                t.setAttribute(f,
-                                    tr(t.getAttribute(f).replace(/^&/, ''))
-                                        || t.getAttribute(f)))))
-                ;/^&amp;\S+/.test(HTML) && tr(HTML.replace(/^&amp;/, '')) && (
-                    t.innerHTML = tr(HTML.replace(/^&amp;/, '')))
-            }, 10))
         document.querySelectorAll(`[name][href],[name][data-caption]`).forEach(t => (
             t.addEventListener('click', () => (
                 t.dataset.caption && setSub(sbcp, t),
                 t.getAttribute('href') && move(t.getAttribute('href'), {
                     caption: sbcp, element: t }))),
             statusRoute(t, [[
-                tr('bitesMouse'),
+                tr('footer/bites'),
                 t.getAttribute('href') && `~${t.getAttribute('href')}`
             ]])))
+        document.querySelectorAll('*').forEach(t => {
+            setInterval(() => {
+                const HTML = t.innerHTML
+                Object.keys(
+                    Object.fromEntries(Array.from(t.attributes).map(t => [t.name, t.value])))
+                    .forEach(f =>
+                        /^%\S+/.test(t.getAttribute(f)) && (
+                            f === 'name' || (
+                                t.setAttribute(f,
+                                    tr(t.getAttribute(f).replace(/^%/, ''))
+                                        || t.getAttribute(f)))))
+                ;/^\u0025\S+/.test(HTML) && tr(HTML.replace(/^\u0025/, '')) && (
+                    t.innerHTML = tr(HTML.replace(/^\u0025/, '')))
+            }, 10)
+        })
         !function(t, a, c) {
             t.forEach(t => document.body.classList.add(t))
             a.forEach(t => document.body.classList.remove(t))
             typeof c === 'function' && c()
         }(['transition-all', 'ease-out'], ['opacity-0'])
-    }
+    })
 }(((navigator.languages && navigator.languages.length && navigator.languages[0]) || navigator.language || Intl.DateTimeFormat().resolvedOptions().locale).replace(/(\w+)-[\w]+/i, '$1'))

@@ -1,5 +1,3 @@
-import { JSX } from 'preact'
-
 import Article from '../components/Article.tsx'
 import Div from '../components/Div.tsx'
 import Footer from '../components/Footer.tsx'
@@ -7,7 +5,7 @@ import VerticalMenu from '../components/VerticalMenu.tsx'
 
 const SubCaption = Div
 
-export default function(props: JSX.HTMLAttributes<HTMLDivElement>) {
+export default function() {
     return (
         <div id=':app' class='m-auto max-w-screen-sm h-screen border-0 border-x border-[var(--outline)]'>
             <div id=':menu' class='h-full grid transition-all duration-[375ms]'>

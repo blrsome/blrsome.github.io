@@ -6,6 +6,8 @@
     --on-primary: rgb(255, 255, 255);
     --primary-container: rgb(38, 39, 40);
     --on-primary-container: rgb(255, 161, 170);
+    --primary-label: unset;
+    --on-primary-label: rgb(83, 83, 83);
     --secondary: rgb(32, 33, 34);
     --on-secondary: rgb(215, 210, 210);
     --secondary-container: rgba(227, 165, 191, 0.35);
@@ -21,6 +23,14 @@
     --link: inherit;
     --link-variant: rgb(123, 156, 234);
 }
+
+html:root {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+:root[theme="light"] { filter: invert(1) }
+:root[theme="dark"] { filter: invert(0) }
 
 :lang(ja):not(code, kbd, pre, samp) { font-family: 'Noto Sans JP', sans-serif }
 :lang(ko):not(code, kbd, pre, samp) { font-family: 'Noto Sans KR', sans-serif }
