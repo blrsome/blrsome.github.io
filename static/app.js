@@ -132,6 +132,16 @@
                 HighlightCode() {
                     hljs.highlightAll()
                 },
+                ThemeManager() {
+                    let cld = null,
+                        thm = null
+                    setInterval(() => {
+                        cld = window.matchMedia('(prefers-color-scheme: dark)').matches
+                        thm = self.localStorage.getItem('theme')
+                        thm === 'auto' && (thm = (cld ? 'dark' : 'light'))
+                        document.documentElement.setAttribute('theme', thm)
+                    }, 10)
+                },
                 UnderConstruction(path) {
                     conf.guc.enable && move(path)
                 },
@@ -204,6 +214,7 @@
         IO.UnderConstruction('under:construction')
         IO.Scroll([menu.querySelector('nav'), artc])
         IO.HighlightCode()
+        IO.ThemeManager()
         IO.Funcinter(['[name][href]', '[name][data-caption]'])
         IO.WritePage()
         IO.TranslatePage()
@@ -216,10 +227,10 @@
             Element: artc,
             Edit: false
         }, {
-            get(target, p) { return target[p] },
-            set(target, p, value) {
-                target[p] === void 0 || (
-                    IO.SetDocumentationData(p, value), target[p] = value)
+            get(t, p) { return t[p] },
+            set(t, p, v) {
+                t[p] === void 0 || (
+                    IO.SetDocumentationData(p, v), t[p] = v)
             }
         })
         self.Translate = new Proxy({
@@ -228,9 +239,9 @@
             Languages: Object.keys(post).filter(t => /^[a-z]+/i.test(t)),
             Path(query) { return tr(query) }
         }, {
-            get(target, p) { return target[p] },
-            set(target, p, value) {
-                p === 'Language' && (IO.SetPageLanguage(value), target[p] = value)
+            get(t, p) { return t[p] },
+            set(t, p, v) {
+                p === 'Language' && (IO.SetPageLanguage(v), t[p] = v)
             }
         })
     })

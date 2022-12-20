@@ -11,10 +11,12 @@
     --primary-line: rgb(45, 45, 45);
     --secondary: rgb(32, 33, 34);
     --on-secondary: rgb(215, 210, 210);
-    --secondary-container: rgba(227, 165, 191, 0.35);
-    --on-secondary-container: rgb(232, 157, 188);
+    --secondary-container: rgb(39, 39, 40);
+    --on-secondary-container: rgb(170, 163, 167);
     --tertiary: rgb(35, 36, 37);
     --on-tertiary: rgb(143, 143, 143);
+    --tertiary-container: rgba(227, 165, 191, 0.35);
+    --on-tertiary-container: rgb(232, 157, 188);
     --surface: rgb(32, 33, 34);
     --surface-variant: rgb(23, 23, 23);
     --outline: rgb(49, 49, 49);
@@ -32,8 +34,13 @@ html:root {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
 }
-:root[theme="light"] { filter: invert(1) }
-:root[theme="dark"] { filter: invert(0) }
+:root[theme="light"] {
+    --background: rgb(57, 58, 60);
+    filter: invert(1);
+}
+:root[theme="dark"] {
+    filter: invert(0);
+}
 
 :lang(ja):not(code, kbd, pre, samp) { font-family: 'Noto Sans JP', sans-serif }
 :lang(ko):not(code, kbd, pre, samp) { font-family: 'Noto Sans KR', sans-serif }
