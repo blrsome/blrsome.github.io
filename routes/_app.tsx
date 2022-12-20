@@ -28,8 +28,9 @@ export default function App({ Component }: AppProps) {
             <script src='lib/highlight.min.js'></script>
             <script src='lib/smooth-scrollbar.js'></script>
             <script src='lib/system-architecture.js'></script>
-            <script src='app.js'></script>
+            <script src='app.js' defer></script>
         </Head>
+        <noscript><meta http-equiv="refresh" content="0;url=https://blr.kr" /></noscript>
         <Component />
     </>)
 }

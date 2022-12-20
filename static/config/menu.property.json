@@ -5,25 +5,24 @@
         "icon": "ArrowUpLeft24Filled",
         "href": "/",
         "data-same-url": "%same/title"
-    }, {
-        "name": "%menu/third",
-        "icon": "Library24Filled",
-        "href": "/third",
-        "data-same-url": "%same/url"
     }]
+}, {
+    "divide": true
+}, {
+    "name": "%menu/label/project",
+    "children": []
 }, {
     "divide": true
 }, {
     "name": "%menu/label/others",
     "children": [{
+        "name": "%menu/third",
+        "icon": "Library24Filled",
+        "href": "/third",
+        "data-same-url": "%same/url"
+    }, {
         "name": "%menu/preferences",
+        "icon": "Settings24Filled",
         "href": "/preferences"
-    }]
-}, {
-    "name": null,
-    "children": [{
-        "name": "%menu/joke",
-        "icon": "Cookie24Filled",
-        "data-caption": "%menu/joke/caption"
     }]
 }]

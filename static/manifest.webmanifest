@@ -1,8 +1,8 @@
 {
     "name": "Blrsome",
-    "start_url": ".",
+    "start_url": "/",
     "display": "standalone",
-    "background_color": "#000",
+    "background_color": "#151617",
     "description": "To keep changing and moving forward.",
     "icons": []
 }

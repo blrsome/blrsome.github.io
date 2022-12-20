@@ -7,7 +7,7 @@ const SubCaption = Div
 
 export default function() {
     return (
-        <div id=':app' class='m-auto max-w-screen-sm h-screen border-0 border-x border-[var(--outline)]'>
+        <div id=':app' class='m-auto max-w-screen-sm h-screen border-0 border-x border-[var(--outline)] disable'>
             <div id=':menu' class='h-full grid transition-all duration-[375ms]'>
                 <VerticalMenu />
                 <Article class='p-[0.5rem_1rem] pb-24 block col-[2] row-[1/4]

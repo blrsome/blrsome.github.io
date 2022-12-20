@@ -18,10 +18,12 @@
     --surface-variant: rgb(23, 23, 23);
     --outline: rgb(49, 49, 49);
     --outline-variant: rgb(45, 45, 45);
-    --scroll-track: transparent;
-    --scroll-thumb: rgba(175, 175, 183, 0.3);
     --link: inherit;
     --link-variant: rgb(123, 156, 234);
+    --scroll-track: transparent;
+    --scroll-thumb: rgba(175, 175, 183, 0.3);
+    --disable-color: transparent;
+    --disable: rgb(36, 37, 38);
 }
 
 html:root {
@@ -68,6 +70,21 @@ body {
 }
 body > div {
     background-color: var(--surface);
+}
+.disable * {
+    text-overflow: unset;
+    white-space: nowrap;
+    overflow: hidden;
+    pointer-events: none;
+}
+.disable :is(
+    div[href],
+    span[name],
+    article>.scroll-content,
+    footer>span) {
+        border-radius: 0;
+        color: var(--disable-color);
+        background-color: var(--disable);
 }
 footer::selection {
     color: var(--on-tertiary);

@@ -1,16 +1,16 @@
 !function(lng) {
-    const subQueue = [],
-        tcfg = {
-            theme: {
-                screens: {
-                    sm: { max: '576px' },
-                    md: { min: '577px' },
-                }
-            }
-        }
+    const subQueue = []
     let blv1 = null,
         post = null,
         trsl = null
+    tailwind.config = {
+        theme: {
+            screens: {
+                sm: { max: '576px' },
+                md: { min: '577px' },
+            }
+        }
+    }
     function move(t, a) {
         const u = new URL(/^http(s)?:(\/{2})?/.test(t) ? t : `blr:${/^(\/|\\)/.test(t) ? t.replace(/\\/g, '/') : `/${t}`}`)
         location.pathname === u.pathname &&
@@ -21,6 +21,19 @@
         : /^http(s)?:(\/{2})?/.test(u.href)
         ? window.open(u.href, '_blank').focus()
         : history.pushState(null, u.pathname, u.pathname)
+    }
+    function scriptsInject() {
+        const docModule = '__DOCUMENT_MODULE'
+        document.querySelectorAll(`#${docModule}`).forEach(t => t.remove())
+        document.querySelectorAll('article script').forEach(async s => {
+            const l = s.getAttribute('src'),
+                d = await (await fetch(l)).text()
+                e = document.createElement('script')
+            e.id = docModule
+            e.type = 'application/javascript'
+            e.innerText = d
+            document.body.appendChild(e)
+        })
     }
     function setSub(t, a, q = 'caption') {
         subQueue.push({
@@ -48,7 +61,7 @@
                 t.d.duration ??= 3800,
                 t.b.classList.add('h-6'),
                 t.b.classList.add('bottom-0'),
-                t.b.innerText = t.d[t.c],
+                t.b.innerText = t.d[t.c] || tr('same/url'),
                 t.e.dataset.count = parseInt(t.e.dataset.count) + 1 || 1,
                 setTimeout(() => {
                     t.b.classList.remove('h-6')
@@ -104,7 +117,6 @@
         post = blv1[lng || 'en']
         trsl = post.translate
         conf = blv1._conf
-        tailwind.config = tcfg
         hljs.highlightAll()
         conf.guc.enable && move('under:construction')
         !function(t) {
@@ -127,13 +139,13 @@
                     .replace(/&quot;/g, '"')
                     .replace(/<p>\s+?<code>(.*)<\/code>\s+?<\/p>/ig, '<pre class="hljs"><code class="language-plaintext">$1</code></pre>')
                     .replace(/\s{5}/g, '\n')
-            t.innerHTML !== mkd && (t.innerHTML = mkd)
+            t.innerHTML !== mkd && (t.innerHTML = mkd, scriptsInject())
         }, 10)
         document.querySelectorAll(`[name][href],[name][data-caption]`).forEach(t => (
             t.addEventListener('click', () => (
                 t.dataset.caption && setSub(sbcp, t),
-                t.getAttribute('href') && move(t.getAttribute('href'), {
-                    caption: sbcp, element: t }))),
+                t.getAttribute('href') && (
+                    move(t.getAttribute('href'), {caption: sbcp, element: t })))),
             statusRoute(t, [[
                 tr('footer/bites'),
                 t.getAttribute('href') && `~${t.getAttribute('href')}`
@@ -157,6 +169,7 @@
             t.forEach(t => document.body.classList.add(t))
             a.forEach(t => document.body.classList.remove(t))
             typeof c === 'function' && c()
-        }(['transition-all', 'ease-out'], ['opacity-0'])
+        }(['transition-all', 'ease-out'], ['opacity-0'], () =>
+            document.getElementById(':app').classList.remove('disable'))
     })
 }(((navigator.languages && navigator.languages.length && navigator.languages[0]) || navigator.language || Intl.DateTimeFormat().resolvedOptions().locale).replace(/(\w+)-[\w]+/i, '$1'))
