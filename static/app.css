@@ -3,16 +3,17 @@
     --background: rgb(21, 22, 23);
     --on-background: rgb(204, 202, 199);
     --primary: rgb(27, 28, 29);
-    --on-primary: rgb(255, 255, 255);
+    --on-primary: rgb(191, 191, 191);
     --primary-container: rgb(38, 39, 40);
     --on-primary-container: rgb(255, 161, 170);
     --primary-label: unset;
     --on-primary-label: rgb(83, 83, 83);
+    --primary-line: rgb(45, 45, 45);
     --secondary: rgb(32, 33, 34);
     --on-secondary: rgb(215, 210, 210);
     --secondary-container: rgba(227, 165, 191, 0.35);
     --on-secondary-container: rgb(232, 157, 188);
-    --tertiary: rgb(21, 22, 23);
+    --tertiary: rgb(35, 36, 37);
     --on-tertiary: rgb(143, 143, 143);
     --surface: rgb(32, 33, 34);
     --surface-variant: rgb(23, 23, 23);
@@ -72,19 +73,19 @@ body > div {
     background-color: var(--surface);
 }
 .disable * {
-    text-overflow: unset;
-    white-space: nowrap;
-    overflow: hidden;
-    pointer-events: none;
+    text-overflow: unset !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
 }
 .disable :is(
     div[href],
     span[name],
     article>.scroll-content,
     footer>span) {
-        border-radius: 0;
-        color: var(--disable-color);
-        background-color: var(--disable);
+        border-radius: 0 !important;
+        color: var(--disable-color) !important;
+        background-color: var(--disable) !important;
 }
 footer::selection {
     color: var(--on-tertiary);
@@ -97,9 +98,6 @@ footer::selection {
     grid-template-columns: 12rem 1fr;
     -ms-grid-rows: auto calc(2.25rem - 1.5rem) 1.5rem;
     grid-template-rows: auto calc(2.25rem - 1.5rem) 1.5rem;
-}
-#\:fixed {
-    margin-inline: 1px;
 }
 
 .cap-0 { height: 0em }

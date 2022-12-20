@@ -9,7 +9,7 @@ import menu from '../static/config/menu.property.json' assert { type: 'json' }
 export default function(props: JSX.HTMLAttributes<HTMLElement>) {
     let tab = 0
     return (
-        <nav {...props} class={`bg-[var(--primary)] flex flex-col overflow-x-hidden overflow-y-auto ${props.class ?? ''}`}>
+        <nav {...props} class={`text-[var(--on-primary)] bg-[var(--primary)] flex flex-col overflow-x-hidden overflow-y-auto ${props.class ?? ''}`}>
             {menu.map((t, i) => (
                 <div data-menu-idx={String(i)}>{
                     t.divide ? <HR />
