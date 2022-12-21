@@ -165,7 +165,6 @@
                                     .replace(/\\'/g, '\'')
                                 ).replace(/&quot;/g, '"')
                                 .replace(/<p>\s+?<code>(.*)<\/code>\s+?<\/p>/ig, '<pre class="hljs"><code class="language-plaintext">$1</code></pre>')
-                                .replace(/\s{5}/g, '\n')
                     }
                     let dpt = null,
                         mkd = null,
@@ -224,13 +223,16 @@
             () => document.getElementById(':app').classList.remove('disable'))
         /** Window */
         self.Documentation = new Proxy({
+            Data: JSON.parse(self.localStorage.getItem('data')) || {},
             Element: artc,
             Edit: false
         }, {
             get(t, p) { return t[p] },
             set(t, p, v) {
                 t[p] === void 0 || (
-                    IO.SetDocumentationData(p, v), t[p] = v)
+                    p === 'Data' && self.localStorage.setItem('data', JSON.stringify(v)),
+                    p === 'Edit' && IO.SetDocumentationData(p, v),
+                    t[p] = v)
             }
         })
         self.Translate = new Proxy({
