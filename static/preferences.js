@@ -1,6 +1,6 @@
 !(function () {
     Documentation.Edit = !0;
-    const IO = {
+    const P = {
             Create(n, t) {
                 const e = document.createElement(n);
                 t.text && (e.textContent = t.text, delete t.text),
@@ -22,7 +22,7 @@
                     n = null,
                     a = null,
                     l = null;
-                n = IO.Create('div', {
+                n = P.Create('div', {
                     'data-checked': t.a === t.b,
                     'class': [
                         'my-1',
@@ -42,7 +42,7 @@
                         'duration-300',
                         'cursor-pointer']
                 }),
-                a = IO.Create('input', {
+                a = P.Create('input', {
                     id: `${t.section.replace(/\\/g, '')}:${t.a}`,
                     type: 'radio',
                     name: t.dependence,
@@ -67,7 +67,7 @@
                         'before:absolute']
                 }),
                 (t.a === t.b && a.setAttribute('checked', true)),
-                l = IO.Create('label', {
+                l = P.Create('label', {
                     text: Translate.Path(t.translatePath),
                     for: `${t.section}:${t.a}`,
                     'class': [
@@ -83,7 +83,7 @@
                         t === e.target.parentElement || delete t.dataset.checked),
                     n.dataset.checked = e.target.checked))),
                 (l.addEventListener('click', () => a.click())),
-                IO.Include(d, n, a, l)
+                P.Include(d, n, a, l)
             },
             ToggleButton(t) {
                 t.section &&= t.section.replace(/\:/g, '\\:'),
@@ -95,7 +95,7 @@
                     n = null,
                     a = null,
                     l = null;
-                n = IO.Create('div', {
+                n = P.Create('div', {
                     'data-checked': t.state,
                     'class': [
                         'my-1',
@@ -115,7 +115,7 @@
                         'duration-300',
                         'cursor-pointer']
                 }),
-                a = IO.Create('input', {
+                a = P.Create('input', {
                     id: `${t.section.replace(/\\/g, '')}:${t.dependence}`,
                     type: 'checkbox',
                     name: t.dependence,
@@ -148,7 +148,7 @@
                         'after:ease-out']
                 }),
                 (t.state && a.setAttribute('checked', true)),
-                l = IO.Create('label', {
+                l = P.Create('label', {
                     text: t.label,
                     for: `${t.section}:${t.a}`,
                     'class': [
@@ -163,41 +163,15 @@
                     t.changeCallback(e),
                     n.dataset.checked = e.target.checked))),
                 (l.addEventListener('click', () => a.click())),
-                IO.Include(d, n, a, l)
-            },
-            Data(t, s, e) {
-                let d = null;
-                d === void 0 || (
-                    d = Documentation.Data[t],
-                    s && s(d),
-                    e && setInterval(() => (d = Documentation.Data[t], e(d)), 10))
-            },
-            GetSeason() {
-                const date = luxon.DateTime,
-                    now = date.fromISO(date.now().toISO(), {zone: 'utc'}),
-                    snowStart = date.fromISO(`${now.year}-12-07T00:00:00`),
-                    snowEnd = date.fromISO(`${now.year + 1}-01-22T00:00:00`),
-                    rainStart = date.fromISO(`${now.year}-06-05T00:00:00`),
-                    rainEnd = date.fromISO(`${now.year + 1}-07-13T00:00:00`);
-                return snowStart < now && now < snowEnd ? 'winter'
-                    : rainStart < now && now < rainEnd && 'rainy'
+                P.Include(d, n, a, l)
             }
-        },
-        snowConfig = {
-            container: document.querySelector('#effect\\:snow'),
-            density: 150,
-            wave: { amplitude: 0.3 },
-            gravity: { strength: 0.15 },
-            bg: 'rgba(0,0,0,0)',
-            primary: 'rgba(255,255,255,0.6)',
-            secondary: 'rgba(255,255,255,0.34)',
         };
     Object.entries({
         auto: 'theme/auto',
         light: 'theme/light',
         dark: 'theme/dark'
     }).forEach(([n, t]) =>
-        IO.RadioButton({
+        P.RadioButton({
             section: 'p\:theme',
             a: n,
             b: self.localStorage.getItem('theme') || 'auto',
@@ -206,7 +180,7 @@
             changeCallback: e => self.localStorage.setItem('theme', e.target.value),
         })),
     Translate.Languages.forEach(t =>
-        IO.RadioButton({
+        P.RadioButton({
             section: 'p\:lang',
             a: t,
             b: document.documentElement.lang,
@@ -220,23 +194,11 @@
             toggle(value) { Documentation.Data = { seasonal: value }}
         }
     }).forEach(([n, t]) =>
-        IO.ToggleButton({
+        P.ToggleButton({
             section: 'p\:exp',
             dependence: n,
             label: t.name,
             state: Documentation.Data.seasonal || false,
             changeCallback: e => t.toggle(e.target.checked)
-        })),
-    function() {
-        let s = IO.GetSeason();
-        console.log(s);
-        function start(t, cfg) {
-            t ? snowConfig.container.classList.remove('opacity-0') : (
-                !snowConfig.container.children.length && snowfall.start(cfg),
-                snowConfig.container.classList.add('opacity-0'))
-        }
-        IO.Data('seasonal',
-            t => t && (s === 'winter' && snowfall.start(snowConfig)),
-            t => (s = IO.GetSeason(), s === 'winter' && start(t, snowConfig)))
-    }()
+        }))
 })();
