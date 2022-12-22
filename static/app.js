@@ -20,7 +20,7 @@
         undr && location.pathname.includes(undr[1]) && (t = undr[1])
         const u = new URL(/^http(s)?:(\/{2})?/.test(t) ? t : `blr:${/^(\/|\\)/.test(t) ? t.replace(/\\/g, '/') : `/${t}`}`)
         location.pathname === u.pathname &&
-            a.caption && a.element &&
+            a && a.caption && a.element &&
                 setSub(a.caption, a.element, 'sameUrl')
         typeof history.pushState === 'undefined'
             ? (location.href = u.href)
