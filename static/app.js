@@ -3,6 +3,7 @@
     let post = null,
         page = null,
         tale = null,
+        conf = null,
         prev = null,
         undr = null
     tailwind.config = {
@@ -13,20 +14,25 @@
             }
         }
     }
-    function r1() {
-        return fetch('./api/r1')
-    }
     function move(t, a) {
-        undr && location.pathname.includes(undr[1]) && (t = undr[1])
-        const u = new URL(/^http(s)?:(\/{2})?/.test(t) ? t : `blr:${/^(\/|\\)/.test(t) ? t.replace(/\\/g, '/') : `/${t}`}`)
-        location.pathname === u.pathname &&
-            a && a.caption && a.element &&
-                setSub(a.caption, a.element, 'sameUrl')
-        typeof history.pushState === 'undefined'
-            ? (location.href = u.href)
-            : /^http(s)?:(\/{2})?/.test(u.href)
-            ? window.open(u.href, '_blank').focus()
-            : history.pushState(null, u.pathname, u.pathname)
+        const u = new URL(/^http(s)?:(\/{2})?/.test(t) ? t : `blr:${/^(\/|\\)/.test(t) ? t.replace(/\\/g, '/') : `/${t}`}`),
+            s = t.replace(/^\//, '') || 0,
+            r = new RegExp(location.pathname.replace(/^\//, '') || 0)
+        function through(url) {
+            typeof history.pushState === 'undefined'
+                ? (location.href = (url || u.href))
+                : /^http(s)?:(\/{2})?/.test(url || u.href)
+                ? window.open(url || u.href, '_blank').focus()
+                : history.pushState(null, url || u.pathname, url || u.pathname)
+        }
+        if (r.test(s)) {
+            a && a.caption && a.element && setSub(a.caption, a.element, 'sameUrl')
+            return
+        } else if (conf.guc.enable && undr) {
+            through(undr)
+            return
+        }
+        through()
     }
     function setSub(t, a, q = 'caption') {
         subQueue.push({
@@ -35,17 +41,19 @@
             e: a,
             d: Object.assign({}, a.dataset)})
     }
-    function scriptsInject() {
-        const docModule = '__DOCUMENT_MODULE'
-        document.querySelectorAll(`#${docModule}`).forEach(t => t.remove())
-        document.querySelectorAll('article script').forEach(async s => {
-            const l = s.getAttribute('src'),
-                d = await (await fetch(l)).text()
-                e = document.createElement('script')
-            e.id = docModule
-            e.type = 'application/javascript'
-            e.innerText = d
+    function scriptsInject(t) {
+        function documentModule(t, b) {
+            const e = document.createElement('script'),
+                a = new TextEncoder('utf8').encode(t || b),
+                x = btoa(String.fromCharCode(...new Uint8Array(a)))
+            e.id = `__DOCUMENT_MODULE_${x.replace(/={1,2}$/, '')}`
+            e.innerText = t
             document.body.appendChild(e)
+        }
+        t.split(';').forEach(async t => {
+            const p = fetch(t),
+                j = (await p).headers.get('content-type') === 'application/javascript'
+            j && documentModule(await (await p).text(), t)
         })
     }
     function setStatus(t, a) {
@@ -113,16 +121,16 @@
     self.addEventListener('load', async function init() {
         const SB = { thumbMinSize: 15 },
             menu = document.getElementById('\:menu'),
-            subc = document.getElementById('sub:content'),
+            subc = document.getElementById('sub'),
             artc = menu.querySelector('article'),
             IO = {
                 Experience: {
                     Data(t, s, e) {
                         let d = null;
                         d === void 0 || (
-                            d = Documentation.Data[t],
+                            d = Reflect.get(Documentation.Data, t),
                             s && s(d),
-                            e && setInterval(() => (d = Documentation.Data[t], e(d)), 10))
+                            e && setInterval(() => (d = Reflect.get(Documentation.Data, t), e(d)), 10))
                     },
                     Season: {
                         current(callback) {
@@ -157,7 +165,7 @@
                     hljs.highlightAll()
                 },
                 UnderConstruction(path) {
-                    conf.guc.enable && move((undr = [true, path], undr[1]))
+                    location.origin.includes('localhost') || move((undr = path, path))
                 },
                 LoadedPage(t, a, c) {
                     t.forEach(t => document.body.classList.add(t))
@@ -195,7 +203,7 @@
                             ctt.innerHTML !== mkd && artc.dataset.documentationEdit !== 'true' && (
                                 prev = location.pathname,
                                 ctt.innerHTML = mkd,
-                                scriptsInject())
+                                dpt.include && scriptsInject(dpt.include))
                         }
                     }, 10)
                     loop || clearInterval(i)
@@ -219,7 +227,7 @@
                     location.reload()
                 },
             }
-        post = await r1().then(t => t.json())
+        post = await fetch('./api/r1').then(t => t.json())
         page = post[lng || 'en']
         tale = page.translate
         conf = post._conf
@@ -234,18 +242,38 @@
         }
         /** Window */
         self.Documentation = new Proxy({
-            Data: JSON.parse(self.localStorage.getItem('data')) || {},
+            Data: new Proxy(JSON.parse(self.localStorage.getItem('data')) || {}, {
+                get(target, prop, receiver) { return Reflect.get(target, prop, receiver) },
+                set(target, prop, value, receiver) {
+                    Reflect.set(target,prop, value, receiver)
+                    self.localStorage.setItem('data',
+                        JSON.stringify(Object.assign({}, target)))
+                }
+            }),
+            Edit: false,
             Element: artc,
-            Edit: false
+            Work: new Proxy(JSON.parse(self.localStorage.getItem('processes')) || {}, {
+                get(target, prop, receiver) { return Reflect.get(target, prop, receiver) },
+                set(target, prop, value, receiver) {
+                    Reflect.set(target,prop, value, receiver)
+                    self.localStorage.setItem('processes',
+                        JSON.stringify(Object.assign({}, target)))
+                },
+                deleteProperty(target, prop) {
+                    Reflect.deleteProperty(target, prop)
+                    self.localStorage.setItem('processes',
+                        JSON.stringify(Object.assign({}, target)))
+                }
+            }),
         }, {
-            get(t, p) {
-                p === 'Data' && self.localStorage.setItem('data', JSON.stringify(t[p]))
-                return t[p]
+            get(target, prop, receiver) { return Reflect.get(target, prop, receiver) },
+            set(target, prop, value, receiver) {
+                prop === 'Edit' && (
+                    IO.SetDocumentationData(prop, value),
+                    Reflect.set(target,prop, value, receiver))
+                prop === 'Element' && Reflect.set(target,prop, value, receiver)
             },
-            set(t, p, v) {
-                t[p] === void 0 || (
-                    p === 'Edit' && (IO.SetDocumentationData(p, v), t[p] = v))
-            }
+            deleteProperty() {}
         })
         self.Translate = new Proxy({
             Default: conf.ref,
@@ -253,13 +281,16 @@
             Languages: Object.keys(post).filter(t => /^[a-z]+/i.test(t)),
             Path(query) { return tr(query) }
         }, {
-            get(t, p) { return t[p] },
-            set(t, p, v) {
-                p === 'Language' && (IO.SetPageLanguage(v), t[p] = v)
-            }
+            get(target, prop, receiver) { return Reflect.get(target, prop, receiver) },
+            set(target, prop, value, receiver) {
+                prop === 'Language' && (
+                    IO.SetPageLanguage(value),
+                    Reflect.set(target,prop, value, receiver))
+            },
+            deleteProperty() {}
         })
         /** FF */
-        IO.UnderConstruction('under:construction')
+        IO.UnderConstruction('/under:construction')
         IO.Scroll([menu.querySelector('nav'), artc])
         IO.HighlightCode()
         IO.Funcinter(['[name][href]', '[name][data-caption]'])
@@ -297,5 +328,6 @@
                 t => t && (s === 'winter' && snowfall.start(snowfall.config)),
                 t => (s = IO.Experience.Season.current(), s === 'winter' && start(t, snowfall.config)))
         })
+        artc.dataset.scrollbar && (self.Documentation.Element = artc.querySelector('.scroll-content'))
     })
 }(self.localStorage.getItem('lng') || ((navigator.languages && navigator.languages.length && navigator.languages[0]) || navigator.language || Intl.DateTimeFormat().resolvedOptions().locale).replace(/(\w+)-[\w]+/i, '$1'))
