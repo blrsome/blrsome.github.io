@@ -15,8 +15,9 @@
         }
     }
     function move(t, a) {
+        t = String(t || 0)
         const u = new URL(/^http(s)?:(\/{2})?/.test(t) ? t : `blr:${/^(\/|\\)/.test(t) ? t.replace(/\\/g, '/') : `/${t}`}`),
-            s = t.replace(/^\//, '') || 0,
+            s = t.replace(/^\//, ''),
             r = new RegExp(location.pathname.replace(/^\//, '') || 0)
         function through(url) {
             typeof history.pushState === 'undefined'
@@ -165,7 +166,7 @@
                     hljs.highlightAll()
                 },
                 UnderConstruction(path) {
-                    location.origin.includes('localhost') || move((undr = path, path))
+                    location.origin.includes('localhost') || (undr = path, move())
                 },
                 LoadedPage(t, a, c) {
                     t.forEach(t => document.body.classList.add(t))
