@@ -13,7 +13,7 @@
     --on-secondary: rgb(215, 210, 210);
     --secondary-container: rgb(39, 39, 40);
     --on-secondary-container: rgb(170, 163, 167);
-    --tertiary: rgb(35, 36, 37);
+    --tertiary: rgba(38, 39, 40, 0.35);
     --on-tertiary: rgb(143, 143, 143);
     --tertiary-container: rgba(227, 165, 191, 0.35);
     --on-tertiary-container: rgb(232, 157, 188);
@@ -99,12 +99,14 @@ footer::selection {
     background-color: var(--tertiary);
 }
 
-#\:menu,
-#\:fixed {
+#\:menu {
     -ms-grid-columns: 12rem 1fr;
     grid-template-columns: 12rem 1fr;
-    -ms-grid-rows: auto calc(2.25rem - 1.5rem) 1.5rem;
-    grid-template-rows: auto calc(2.25rem - 1.5rem) 1.5rem;
+}
+#\:menu,
+#\:fixed {
+    -ms-grid-rows: 1fr 1.25rem;
+    grid-template-rows: 1fr 1.25rem;
 }
 
 .cap-0 { height: 0em }

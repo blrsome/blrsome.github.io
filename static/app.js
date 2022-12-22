@@ -3,7 +3,8 @@
     let post = null,
         page = null,
         tale = null,
-        prev = null
+        prev = null,
+        undr = null
     tailwind.config = {
         theme: {
             screens: {
@@ -16,6 +17,7 @@
         return fetch('./api/r1')
     }
     function move(t, a) {
+        undr && location.pathname.includes(undr[1]) && (t = undr[1])
         const u = new URL(/^http(s)?:(\/{2})?/.test(t) ? t : `blr:${/^(\/|\\)/.test(t) ? t.replace(/\\/g, '/') : `/${t}`}`)
         location.pathname === u.pathname &&
             a.caption && a.element &&
@@ -154,18 +156,8 @@
                 HighlightCode() {
                     hljs.highlightAll()
                 },
-                ThemeManager() {
-                    let cld = null,
-                        thm = null
-                    setInterval(() => {
-                        cld = window.matchMedia('(prefers-color-scheme: dark)').matches
-                        thm = self.localStorage.getItem('theme')
-                        thm === 'auto' && (thm = (cld ? 'dark' : 'light'))
-                        document.documentElement.setAttribute('theme', thm)
-                    }, 10)
-                },
                 UnderConstruction(path) {
-                    conf.guc.enable && move(path)
+                    conf.guc.enable && move((undr = [true, path], undr[1]))
                 },
                 LoadedPage(t, a, c) {
                     t.forEach(t => document.body.classList.add(t))
@@ -225,7 +217,7 @@
                 SetPageLanguage(lng) {
                     self.localStorage.setItem('lng', lng)
                     location.reload()
-                }
+                },
             }
         post = await r1().then(t => t.json())
         page = post[lng || 'en']
@@ -246,12 +238,13 @@
             Element: artc,
             Edit: false
         }, {
-            get(t, p) { return t[p] },
+            get(t, p) {
+                p === 'Data' && self.localStorage.setItem('data', JSON.stringify(t[p]))
+                return t[p]
+            },
             set(t, p, v) {
                 t[p] === void 0 || (
-                    p === 'Data' && self.localStorage.setItem('data', JSON.stringify(v)),
-                    p === 'Edit' && IO.SetDocumentationData(p, v),
-                    t[p] = v)
+                    p === 'Edit' && (IO.SetDocumentationData(p, v), t[p] = v))
             }
         })
         self.Translate = new Proxy({
@@ -269,7 +262,6 @@
         IO.UnderConstruction('under:construction')
         IO.Scroll([menu.querySelector('nav'), artc])
         IO.HighlightCode()
-        IO.ThemeManager()
         IO.Funcinter(['[name][href]', '[name][data-caption]'])
         IO.WritePage()
         IO.TranslatePage()
@@ -277,6 +269,24 @@
             ['transition-all', 'ease-out'],
             ['opacity-0'],
             () => document.getElementById(':app').classList.remove('disable'))
+        IO.Experience.Data('theme',
+            t => document.documentElement.setAttribute('theme', t),
+            t => {
+                const a = document.documentElement.getAttribute('theme'),
+                    m = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+                    b = t === 'auto' ? m : t || m
+                function whiteSnow(t) {
+                    t === 'light' && (
+                        snowfall.setPrimary('rgba(0,0,0,0.78)'),
+                        snowfall.setSecondary('rgba(0,0,0,1)'))
+                    t === 'dark' && (
+                        snowfall.setPrimary(snowfall.config.primary),
+                        snowfall.setSecondary(snowfall.config.secondary))
+                }
+                a === b || (
+                    whiteSnow(b),
+                    document.documentElement.setAttribute('theme', b))
+            })
         IO.Experience.Season.current(s => {
             function start(t, c) {
                 t ? c.container.classList.remove('opacity-0') : (
