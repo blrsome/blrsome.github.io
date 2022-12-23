@@ -1,16 +1,11 @@
 [{
-    "name": null,
+    "name": "%menu/label/project",
     "children": [{
         "name": "%menu/title",
         "icon": "ArrowUpLeft24Filled",
         "href": "/",
         "data-same-url": "%same/title"
     }]
-}, {
-    "divide": true
-}, {
-    "name": "%menu/label/project",
-    "children": []
 }, {
     "divide": true
 }, {

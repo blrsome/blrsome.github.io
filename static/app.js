@@ -10,7 +10,7 @@
         theme: {
             screens: {
                 sm: { max: '576px' },
-                md: { min: '577px' },
+                md: { min: '576px' },
             }
         }
     }
@@ -43,6 +43,7 @@
             d: Object.assign({}, a.dataset)})
     }
     function scriptsInject(t) {
+        document.querySelectorAll('script[id*=__DOCUMENT_MODULE]').forEach(t => t.remove())
         function documentModule(t, b) {
             const e = document.createElement('script'),
                 a = new TextEncoder('utf8').encode(t || b),
@@ -51,7 +52,7 @@
             e.innerText = t
             document.body.appendChild(e)
         }
-        t.split(';').forEach(async t => {
+        t && t.split(';').forEach(async t => {
             const p = fetch(t),
                 j = (await p).headers.get('content-type') === 'application/javascript'
             j && documentModule(await (await p).text(), t)
@@ -139,9 +140,14 @@
                                 now = date.fromISO(date.now().toISO(), {zone: 'utc'}),
                                 snowStart = date.fromISO(`${now.year}-12-07T00:00:00`),
                                 snowEnd = date.fromISO(`${now.year + 1}-01-22T00:00:00`),
+                                nyStart = date.fromISO(`${now.year}-12-22T23:55:50`),
+                                nyEnd = date.fromISO(`${now.year}-12-22T23:56:10`),
+                                // nyStart = date.fromISO(`${now.year}-12-31T18:00:00`),
+                                // nyEnd = date.fromISO(`${now.year + 1}-01-01T01:00:00`),
                                 rainStart = date.fromISO(`${now.year}-06-05T00:00:00`),
-                                rainEnd = date.fromISO(`${now.year + 1}-07-13T00:00:00`),
-                                season = snowStart < now && now < snowEnd ? 'winter'
+                                rainEnd = date.fromISO(`${now.year}-07-13T00:00:00`),
+                                season = nyStart < now && now < nyEnd ? 'revolution'
+                                    : snowStart < now && now < snowEnd ? 'winter'
                                     : rainStart < now && now < rainEnd && 'rainy'
                             return callback ? callback(season) : season
                         }
@@ -204,7 +210,7 @@
                             ctt.innerHTML !== mkd && artc.dataset.documentationEdit !== 'true' && (
                                 prev = location.pathname,
                                 ctt.innerHTML = mkd,
-                                dpt.include && scriptsInject(dpt.include))
+                                scriptsInject(dpt.include))
                         }
                     }, 10)
                     loop || clearInterval(i)
@@ -265,7 +271,7 @@
                     self.localStorage.setItem('processes',
                         JSON.stringify(Object.assign({}, target)))
                 }
-            }),
+            })
         }, {
             get(target, prop, receiver) { return Reflect.get(target, prop, receiver) },
             set(target, prop, value, receiver) {
@@ -304,20 +310,17 @@
         IO.Experience.Data('theme',
             t => document.documentElement.setAttribute('theme', t),
             t => {
-                const a = document.documentElement.getAttribute('theme'),
-                    m = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+                const m = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
                     b = t === 'auto' ? m : t || m
-                function whiteSnow(t) {
+                ;(function(t) {
                     t === 'light' && (
                         snowfall.setPrimary('rgba(0,0,0,0.78)'),
                         snowfall.setSecondary('rgba(0,0,0,1)'))
                     t === 'dark' && (
                         snowfall.setPrimary(snowfall.config.primary),
                         snowfall.setSecondary(snowfall.config.secondary))
-                }
-                a === b || (
-                    whiteSnow(b),
-                    document.documentElement.setAttribute('theme', b))
+                    document.documentElement.setAttribute('theme', t)
+                }(b))
             })
         IO.Experience.Season.current(s => {
             function start(t, c) {
@@ -326,9 +329,17 @@
                     c.container.classList.add('opacity-0'))
             }
             IO.Experience.Data('seasonal',
-                t => t && (s === 'winter' && snowfall.start(snowfall.config)),
-                t => (s = IO.Experience.Season.current(), s === 'winter' && start(t, snowfall.config)))
+                t => t && snowfall.start(snowfall.config),
+                t => (s = IO.Experience.Season.current(),
+                    s === 'winter' && start(t, snowfall.config)))
         })
+
+        self.addEventListener('resize', e => {
+            const s = document.querySelector('#effect\\:snow > canvas')
+            s.width = artc.clientWidth
+            s.height = artc.clientHeight
+        })
+
         artc.dataset.scrollbar && (self.Documentation.Element = artc.querySelector('.scroll-content'))
     })
 }(self.localStorage.getItem('lng') || ((navigator.languages && navigator.languages.length && navigator.languages[0]) || navigator.language || Intl.DateTimeFormat().resolvedOptions().locale).replace(/(\w+)-[\w]+/i, '$1'))

@@ -7,7 +7,7 @@ export default function() {
         <div id=':app' class='m-auto max-w-screen-sm h-screen disable'>
             <div id=':menu' class='h-full grid drop-shadow-lg transition-all duration-[375ms]'>
                 <VerticalMenu />
-                <Article class='p-[0.5rem_1rem] pb-24 block col-[2] row-[1/4] prose prose-sm prose-invert prose-blockquote:my-5' />
+                <Article class='p-[0.5rem_1rem] pb-24 block col-[2] row-[1/4] drop-shadow-none prose prose-sm prose-invert prose-blockquote:my-5' />
                 <div class='col-[2] row-[1/4] pointer-events-none z-[16383]'>
                     <div id='effect:snow' class='w-full h-full opacity-0 transition-all duration-[1200ms] transform-gpu'></div>
                 </div>

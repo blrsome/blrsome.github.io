@@ -8,7 +8,7 @@
                 return e
             },
             Include(d, t, ...e) {
-                e.forEach(f => t.appendChild(f)),
+                e.forEach(f => f && t.appendChild(f)),
                 d && d.appendChild(t)
             },
             RadioButton(t) {

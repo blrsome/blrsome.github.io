@@ -63,6 +63,9 @@ article *:focus-visible:not(a) {
 article a {
     color: var(--link);
 }
+article a:hover {
+    color: var(--link-variant);
+}
 article a:focus-visible {
     outline: 0px solid transparent;
     color: var(--link-variant);
@@ -109,6 +112,11 @@ footer::selection {
     grid-template-rows: 1fr 1.25rem;
 }
 
+#effect\:snow canvas {
+    width: 100%;
+    height: 100%;
+}
+
 .cap-0 { height: 0em }
 
 .prose :where(code):not(:where([class~="not-prose"] *))::before,
@@ -136,14 +144,6 @@ footer::selection {
     margin-top: 0;
 }
 
-@media screen and (max-width: 640px) {
-    #\:app {
-        border: 0;
-    }
-    #\:fixed {
-        margin: unset;
-    }
-}
 @media screen and (max-width: 576px) {
     #\:menu,
     #\:fixed {
@@ -155,5 +155,9 @@ footer::selection {
     }
     #\:fixed footer {
         opacity: 0;
+    }
+    :not([icon]) > span {
+        padding-inline: 0.25rem;
+        opacity: 100;
     }
 }
